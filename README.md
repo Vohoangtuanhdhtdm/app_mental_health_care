@@ -7,12 +7,14 @@
 ![Mô tả animation](https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHV6czNkajEyNnN1cGgzcTR4aDl6bmRibjhqYXBxeW1xenVtZ2l5bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/jXtdnZlhK7Fbfo4Ioc/giphy.gif)
 
 ## 🏷️ Quy Tắc Đặt Tên Nhánh Trong Dự Án Này:
-* feat/ (Feature): Cho một tính năng mới.
-* fix/ (Bugfix): Để sửa một lỗi.
-* style/ (Style): Chỉnh sửa liên quan đến định dạng code (linting, formatting), không làm thay đổi logic.
-* refactor/ (Refactoring): Tái cấu trúc code, tối ưu hóa mà không thay đổi tính năng.
-* test/ (Test): Thêm hoặc sửa các bài test (unit test, integration test).
-* chore/ (Chore): Các công việc vặt khác không liên quan đến code (cập nhật file build, config, v.v.).
+| Loại thay đổi | Khi nào dùng | Ví dụ cụ thể |
+|----------------|--------------|---------------|
+| **feat/** (Feature) | Khi việc setup đó **trực tiếp tạo ra một tính năng mới** cho app. | `feat(firebase): add Firebase Authentication` → vì thêm tính năng đăng nhập. |
+| **chore/** (Chore) | Khi setup **chỉ phục vụ môi trường, build, hay cấu hình kỹ thuật**, không làm thay đổi hành vi app. | `chore(firebase): configure Firebase SDK` → chỉ setup SDK, chưa tạo feature nào. |
+| **fix/** (Bugfix) | Khi **sửa lỗi trong cấu hình hoặc môi trường** khiến app không chạy. | `fix(firebase): correct wrong project ID in config` |
+| **refactor/** (Refactoring) | Khi **tái cấu trúc code setup** (chẳng hạn chia nhỏ file config). | `refactor(firebase): split config into separate env files` |
+| **style/** (Style) | Nếu chỉ **sửa format** (ví dụ: re-indent file `.firebaserc`). | `style(firebase): format config file` |
+| **test/** (Test) | Nếu **thêm/sửa test** để kiểm tra việc kết nối hoặc logic liên quan. | `test(firebase): add integration test for Firestore service` |
 
 ## 📈 Bối cảnh & Thị trường
 
