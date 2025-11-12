@@ -36,7 +36,7 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Mindful Minutes', style: text.headlineSmall),
+                      Text('Mindful', style: text.headlineSmall),
                       const SizedBox(height: 6),
                       Text(
                         'Breathe deeply for calm • 20 min',
@@ -53,7 +53,7 @@ class HomePage extends StatelessWidget {
 
           const SizedBox(height: Gaps.xl),
 
-          const AppButton('Start Session', icon: Icon(Icons.play_arrow)),
+          const AppButton('Bắt đầu', icon: Icon(Icons.play_arrow)),
           const SizedBox(height: Gaps.md),
           const AppButton('Focus Mode', type: AppButtonType.tonal),
           const SizedBox(height: Gaps.md),
