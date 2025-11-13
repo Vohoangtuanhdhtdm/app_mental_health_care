@@ -24,6 +24,7 @@ class AppButton extends StatelessWidget {
       mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        // Nếu icon không null thì trải toàn bộ phần tử trong mảng
         if (icon != null) ...[icon!, const SizedBox(width: 8)],
         Text(label),
       ],
