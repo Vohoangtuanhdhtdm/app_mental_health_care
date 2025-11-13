@@ -1,4 +1,6 @@
+import 'package:app_mental_health_care/core/auth/auth_service.dart';
 import 'package:app_mental_health_care/core/widgets/app_scaffold.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/app_card.dart';
@@ -11,6 +13,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
+
+    void logout() async {
+      try {
+        await authService.value.signOut();
+      } on FirebaseAuthException catch (e) {
+        print('Logout failed: ${e.message}');
+      }
+    }
 
     return AppScaffold(
       appBar: AppBar(title: const Text('How can I help you today?')),
@@ -52,7 +62,17 @@ class HomePage extends StatelessWidget {
           ),
 
           const SizedBox(height: Gaps.xl),
-
+          Text(
+            'Hello! ${authService.value.currentUser?.email ?? "Flutter App"}',
+            style: text.titleLarge,
+          ),
+          const SizedBox(height: Gaps.md),
+          TextButton(
+            onPressed: () {
+              logout();
+            },
+            child: Text("Đăng Xuất"),
+          ),
           const AppButton('Bắt đầu', icon: Icon(Icons.play_arrow)),
           const SizedBox(height: Gaps.md),
           const AppButton('Focus Mode', type: AppButtonType.tonal),
