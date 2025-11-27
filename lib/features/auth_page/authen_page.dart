@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:app_mental_health_care/core/widgets/app_scaffold.dart';
 import 'package:app_mental_health_care/core/widgets/app_button.dart';
 import 'package:app_mental_health_care/core/widgets/app_text_field.dart';
-import 'package:app_mental_health_care/core/theme/app_spacing.dart';
 
 enum AuthMode { login, register, reset, changePassword }
 
@@ -89,27 +87,27 @@ class _AuthenPageState extends State<AuthenPage> {
     final text = Theme.of(context).textTheme;
     final isRegister = widget.mode == AuthMode.register;
     final isReset = widget.mode == AuthMode.reset;
-    return AppScaffold(
+    return Scaffold(
       appBar: AppBar(),
       body: Padding(
-        padding: const EdgeInsets.all(Insets.screen),
+        padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
             Center(child: Lottie.asset(widget.lottieAsset, height: 380)),
-            const SizedBox(height: Gaps.lg),
+            const SizedBox(height: 16.0),
 
             Text(
               widget.headline,
               style: text.headlineMedium,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: Gaps.sm),
+            const SizedBox(height: 8.0),
             Text(
               widget.subtitle,
               style: text.bodyMedium,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: Gaps.lg),
+            const SizedBox(height: 16.0),
 
             AppTextField(
               controller: controllerEmail,
@@ -117,7 +115,7 @@ class _AuthenPageState extends State<AuthenPage> {
               prefix: const Icon(Icons.email_outlined),
               keyboardType: TextInputType.emailAddress,
             ),
-            const SizedBox(height: Gaps.md),
+            const SizedBox(height: 12.0),
             if (!isReset) ...[
               AppTextField(
                 controller: controllerPw,
@@ -125,7 +123,7 @@ class _AuthenPageState extends State<AuthenPage> {
                 prefix: const Icon(Icons.lock_outline),
                 obscureText: true,
               ),
-              const SizedBox(height: Gaps.md),
+              const SizedBox(height: 12.0),
             ],
             if (isRegister) ...[
               AppTextField(
@@ -134,9 +132,9 @@ class _AuthenPageState extends State<AuthenPage> {
                 prefix: const Icon(Icons.lock_outline),
                 obscureText: true,
               ),
-              const SizedBox(height: Gaps.lg),
+              const SizedBox(height: 16.0),
             ] else
-              const SizedBox(height: Gaps.lg),
+              const SizedBox(height: 16.0),
 
             AppButton(
               widget.buttonText,
@@ -144,7 +142,7 @@ class _AuthenPageState extends State<AuthenPage> {
               onPressed: _onPressed,
             ),
 
-            const SizedBox(height: Gaps.xl),
+            const SizedBox(height: 22.0),
           ],
         ),
       ),

@@ -1,11 +1,9 @@
-import 'package:app_mental_health_care/core/auth/auth_service.dart';
-import 'package:app_mental_health_care/core/widgets/app_scaffold.dart';
+import 'package:app_mental_health_care/services/auth/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_text_field.dart';
-import '../../core/theme/app_spacing.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -22,26 +20,26 @@ class HomePage extends StatelessWidget {
       }
     }
 
-    return AppScaffold(
+    return Scaffold(
       appBar: AppBar(title: const Text('How can I help you today?')),
       body: ListView(
-        padding: const EdgeInsets.all(Insets.screen),
+        padding: const EdgeInsets.all(18.0),
         children: [
           const AppTextField(
             hintText: 'Search sessions, practices...',
             prefix: Icon(Icons.search),
           ),
-          const SizedBox(height: Gaps.lg),
+          const SizedBox(height: 16.0),
 
           Text('Daily Practice', style: text.titleLarge),
-          const SizedBox(height: Gaps.md),
+          const SizedBox(height: 12.0),
 
           AppCard(
             padding: const EdgeInsets.all(20),
             child: Row(
               children: [
                 const Icon(Icons.self_improvement, size: 36),
-                const SizedBox(width: Gaps.md),
+                const SizedBox(width: 12.0),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,18 +53,18 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: Gaps.md),
+                const SizedBox(width: 12.0),
                 const Icon(Icons.play_circle_fill, size: 32),
               ],
             ),
           ),
 
-          const SizedBox(height: Gaps.xl),
+          const SizedBox(height: 22.0),
           Text(
             'Hello! ${authService.value.currentUser?.email ?? "Flutter App"}',
             style: text.titleLarge,
           ),
-          const SizedBox(height: Gaps.md),
+          const SizedBox(height: 12.0),
           TextButton(
             onPressed: () {
               logout();
@@ -74,9 +72,9 @@ class HomePage extends StatelessWidget {
             child: Text("Đăng Xuất"),
           ),
           const AppButton('Bắt đầu', icon: Icon(Icons.play_arrow)),
-          const SizedBox(height: Gaps.md),
+          const SizedBox(height: 12.0),
           const AppButton('Focus Mode', type: AppButtonType.tonal),
-          const SizedBox(height: Gaps.md),
+          const SizedBox(height: 12.0),
           const AppButton(
             'More Options',
             type: AppButtonType.outline,
