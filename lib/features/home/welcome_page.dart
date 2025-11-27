@@ -4,9 +4,7 @@ import 'package:app_mental_health_care/features/auth_page/reset_password_page.da
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:app_mental_health_care/core/widgets/app_scaffold.dart';
 import 'package:app_mental_health_care/core/widgets/app_button.dart';
-import 'package:app_mental_health_care/core/theme/app_spacing.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -15,24 +13,24 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
 
-    return AppScaffold(
+    return Scaffold(
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(Insets.screen),
+          padding: const EdgeInsets.all(18.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Lottie.asset('assets/lotties/welcome.json', height: 300),
-              const SizedBox(height: Gaps.lg),
+              Lottie.asset('assets/lotties/home.json', height: 300),
+              const SizedBox(height: 16.0),
 
-              Text('Xin Chào 👋', style: text.headlineMedium),
-              const SizedBox(height: Gaps.sm),
+              Text('Xin Chào !', style: text.headlineMedium),
+              const SizedBox(height: 8.0),
 
               Text(
                 "Hãy bắt đầu khắp phá ứng dụng này.",
                 style: text.bodyMedium,
               ),
-              const SizedBox(height: Gaps.xl),
+              const SizedBox(height: 22.0),
 
               AppButton(
                 'Login',
@@ -48,7 +46,7 @@ class WelcomePage extends StatelessWidget {
                   );
                 },
               ),
-              const SizedBox(height: Gaps.md),
+              const SizedBox(height: 12.0),
 
               AppButton(
                 onPressed: () {

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-
-import 'package:app_mental_health_care/core/widgets/app_scaffold.dart';
 import 'package:app_mental_health_care/core/widgets/app_button.dart';
-import 'package:app_mental_health_care/core/theme/app_spacing.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
@@ -12,28 +9,28 @@ class OnboardingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
 
-    return AppScaffold(
+    return Scaffold(
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(Insets.screen),
+          padding: const EdgeInsets.all(18.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Lottie.asset('assets/lotties/home.json', height: 280.0),
-              const SizedBox(height: Gaps.lg),
+              const SizedBox(height: 16.0),
               Text(
                 "Khám phá ứng dụng",
                 style: text.headlineMedium,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: Gaps.sm),
+              const SizedBox(height: 8.0),
 
               Text(
                 "Giới thiệu ngắn gọn về sản phẩm hoặc dịch vụ của bạn.",
                 style: text.bodyMedium,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: Gaps.xl),
+              const SizedBox(height: 22.0),
 
               AppButton(
                 "Tiếp theo",
@@ -41,7 +38,7 @@ class OnboardingPage extends StatelessWidget {
                 onPressed: () {},
               ),
 
-              const SizedBox(height: Gaps.xl),
+              const SizedBox(height: 22.0),
             ],
           ),
         ),

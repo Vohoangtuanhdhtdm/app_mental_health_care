@@ -1,5 +1,4 @@
-import 'package:app_mental_health_care/core/auth/auth_service.dart';
-import 'package:app_mental_health_care/core/widgets/app_scaffold.dart';
+import 'package:app_mental_health_care/services/auth/auth_service.dart';
 import 'package:app_mental_health_care/features/home/home_page.dart';
 import 'package:app_mental_health_care/features/home/welcome_page.dart';
 import 'package:flutter/material.dart';
@@ -18,9 +17,7 @@ class AuthLayout extends StatelessWidget {
           builder: (context, snapshot) {
             Widget page;
             if (snapshot.connectionState == ConnectionState.waiting) {
-              page = AppScaffold(
-                body: Center(child: CircularProgressIndicator()),
-              );
+              page = Scaffold(body: Center(child: CircularProgressIndicator()));
             } else if (snapshot.hasData) {
               page = const HomePage();
             } else {
