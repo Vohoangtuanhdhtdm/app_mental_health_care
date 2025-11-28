@@ -1,12 +1,12 @@
-import 'package:app_mental_health_care/app/features/test_home.dart';
-import 'package:app_mental_health_care/app/features/test_profile.dart';
-import 'package:app_mental_health_care/app/widgets/navbar_widget.dart';
+import 'package:app_mental_health_care/app/features/home/view/home_page.dart';
+import 'package:app_mental_health_care/app/features/home/view/profile_page.dart';
+import 'package:app_mental_health_care/app/features/home/widgets/navbar_widget.dart';
 import 'package:app_mental_health_care/data/constants.dart';
 import 'package:app_mental_health_care/data/notifiers.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-List<Widget> pages = [TestHome(), TestProfile()];
+List<Widget> pages = [HomePage(), TestProfile()];
 
 class WidgetTree extends StatelessWidget {
   const WidgetTree({super.key});

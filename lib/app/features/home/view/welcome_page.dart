@@ -4,7 +4,7 @@ import 'package:app_mental_health_care/app/features/auth/view/reset_password_pag
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:app_mental_health_care/app/widgets/app_button.dart';
+import 'package:app_mental_health_care/app/widgets_system/app_button.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
