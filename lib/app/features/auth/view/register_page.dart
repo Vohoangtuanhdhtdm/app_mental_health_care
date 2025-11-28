@@ -12,8 +12,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  // Khởi tạo service bạn vừa viết
+  // Khởi tạo service
   final DatabaseServices _dbService = DatabaseServices();
+
   void handleRegister(String email, String? password, String? confirm) async {
     if (confirm == null || confirm.isEmpty || confirm != password) {
       if (!mounted) return;
@@ -29,6 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       // luôn check sau await
       if (!mounted) return;
+
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Đăng ký thành công')));
@@ -39,9 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'New User',
         0,
       );
-
       if (!mounted) return;
-
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;

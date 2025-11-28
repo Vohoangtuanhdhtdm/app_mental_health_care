@@ -1,5 +1,5 @@
 import 'package:app_mental_health_care/app/features/auth/auth_layout.dart';
-import 'package:app_mental_health_care/app/widget_tree.dart';
+// import 'package:app_mental_health_care/app/widget_tree.dart';
 import 'package:app_mental_health_care/data/constants.dart';
 import 'package:app_mental_health_care/data/notifiers.dart';
 import 'package:flutter/material.dart';
@@ -39,8 +39,8 @@ class _MentalAppState extends State<MentalApp> {
               brightness: isDark ? Brightness.dark : Brightness.light,
             ),
           ),
-          // home: AuthLayout(),
-          home: WidgetTree(),
+          home: AuthLayout(),
+          // home: WidgetTree(),
         );
       },
     );

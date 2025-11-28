@@ -1,3 +1,5 @@
+import 'package:app_mental_health_care/services/auth/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TestProfile extends StatelessWidget {
@@ -5,6 +7,14 @@ class TestProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void logout() async {
+      try {
+        await authService.value.signOut();
+      } on FirebaseAuthException catch (e) {
+        print('Logout failed: ${e.message}');
+      }
+    }
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -47,7 +57,9 @@ class TestProfile extends StatelessWidget {
           const SizedBox(height: 20),
 
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              logout();
+            },
             child: Text("Đăng xuất", style: TextStyle(fontSize: 14)),
           ),
         ],
