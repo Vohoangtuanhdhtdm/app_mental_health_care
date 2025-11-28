@@ -1,4 +1,4 @@
-import 'package:app_mental_health_care/app/features/auth_page/auth_layout.dart';
+import 'package:app_mental_health_care/app/features/auth/auth_layout.dart';
 import 'package:app_mental_health_care/app/widget_tree.dart';
 import 'package:app_mental_health_care/data/constants.dart';
 import 'package:app_mental_health_care/data/notifiers.dart';
