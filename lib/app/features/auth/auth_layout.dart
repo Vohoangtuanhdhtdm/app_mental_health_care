@@ -1,6 +1,6 @@
 import 'package:app_mental_health_care/services/auth/auth_service.dart';
-import 'package:app_mental_health_care/features/home/home_page.dart';
-import 'package:app_mental_health_care/features/home/welcome_page.dart';
+import 'package:app_mental_health_care/app/features/home/home_page.dart';
+import 'package:app_mental_health_care/app/features/home/welcome_page.dart';
 import 'package:flutter/material.dart';
 
 class AuthLayout extends StatelessWidget {
