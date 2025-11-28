@@ -1,10 +1,10 @@
-import 'package:app_mental_health_care/features/auth_page/login_page.dart';
-import 'package:app_mental_health_care/features/auth_page/register_page.dart';
-import 'package:app_mental_health_care/features/auth_page/reset_password_page.dart';
+import 'package:app_mental_health_care/app/features/auth_page/view/login_page.dart';
+import 'package:app_mental_health_care/app/features/auth_page/view/register_page.dart';
+import 'package:app_mental_health_care/app/features/auth_page/view/reset_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:app_mental_health_care/core/widgets/app_button.dart';
+import 'package:app_mental_health_care/app/widgets/app_button.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});

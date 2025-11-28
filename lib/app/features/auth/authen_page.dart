@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:app_mental_health_care/core/widgets/app_button.dart';
-import 'package:app_mental_health_care/core/widgets/app_text_field.dart';
+import 'package:app_mental_health_care/app/widgets/app_button.dart';
+import 'package:app_mental_health_care/app/widgets/app_text_field.dart';
 
 enum AuthMode { login, register, reset, changePassword }
 
