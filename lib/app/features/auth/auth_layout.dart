@@ -1,5 +1,5 @@
 import 'package:app_mental_health_care/app/widget_tree.dart';
-import 'package:app_mental_health_care/services/auth/auth_service.dart';
+import 'package:app_mental_health_care/data/services/auth/auth_service.dart';
 import 'package:app_mental_health_care/app/features/home/view/welcome_page.dart';
 import 'package:flutter/material.dart';
 
