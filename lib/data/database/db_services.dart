@@ -15,9 +15,8 @@ class DatabaseServices {
         'fullName': fullName,
         'age': age,
         'role': 'student',
-        'createdAt': DateTime.now(),
+        'createdAt': FieldValue.serverTimestamp(),
       });
-      print('Thông tin người dùng đã được lưu thành công.');
     } catch (e) {
       print('Xảy ra lỗi trong quá trình lưu: $e');
     }

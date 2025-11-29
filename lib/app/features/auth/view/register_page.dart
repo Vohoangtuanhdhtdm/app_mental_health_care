@@ -1,6 +1,6 @@
-import 'package:app_mental_health_care/services/auth/auth_service.dart';
+import 'package:app_mental_health_care/data/services/auth/auth_service.dart';
 import 'package:app_mental_health_care/app/features/auth/authen_page.dart';
-import 'package:app_mental_health_care/services/database/db_services.dart';
+import 'package:app_mental_health_care/data/database/db_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
