@@ -11,6 +11,7 @@ class TaskItem extends StatelessWidget {
     this.isActive = false,
     this.isLast = false,
     this.imageUrl,
+    this.audioUrl,
   });
 
   final String title;
@@ -19,6 +20,7 @@ class TaskItem extends StatelessWidget {
   final bool isActive;
   final bool isLast;
   final String? imageUrl;
+  final String? audioUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class TaskItem extends StatelessWidget {
         description: description,
         duration: duration,
         imageUrl: imageUrl,
+        audioUrl: audioUrl,
       ),
     );
   }

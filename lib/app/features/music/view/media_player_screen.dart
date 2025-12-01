@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 
 class MediaPlayerScreen extends StatefulWidget {
   const MediaPlayerScreen({
@@ -6,18 +7,53 @@ class MediaPlayerScreen extends StatefulWidget {
     required this.title,
     required this.description,
     this.imageUrl,
+    required this.audioUrl,
   });
   final String title;
   final String description;
   final String? imageUrl;
+  final String audioUrl;
 
   @override
   State<MediaPlayerScreen> createState() => _MediaPlayerScreenState();
 }
 
 class _MediaPlayerScreenState extends State<MediaPlayerScreen> {
-  bool isPlaying = false;
-  double sliderValue = 0.3; // Mock bài đang chạy được 30%
+  late AudioPlayer _audioPlayer;
+
+  @override
+  void initState() {
+    _audioPlayer = AudioPlayer();
+    _initAudio();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose(); // Giải phóng bộ nhớ khi thoát màn hình
+    super.dispose();
+  }
+
+  // Hàm khởi tạo và load nhạc
+  Future<void> _initAudio() async {
+    try {
+      // Load nhạc từ URL
+      await _audioPlayer.setUrl(widget.audioUrl);
+      // -- Tự động phát khi vào màn hình (nếu muốn)
+      // _audioPlayer.play(); --
+    } catch (e) {
+      print("Lỗi load nhạc: $e");
+    }
+  }
+
+  // Hàm format thời gian (ví dụ 65 giây -> 01:05)
+  String _formatDuration(Duration? duration) {
+    if (duration == null) return "--:--";
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$minutes:$seconds";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,105 +127,137 @@ class _MediaPlayerScreenState extends State<MediaPlayerScreen> {
               ),
             ),
 
-            Column(
-              children: [
-                SliderTheme(
-                  data: SliderTheme.of(context).copyWith(
-                    trackHeight: 4,
-                    thumbShape: const RoundSliderThumbShape(
-                      enabledThumbRadius: 6,
-                    ),
-                    overlayShape: const RoundSliderOverlayShape(
-                      overlayRadius: 14,
-                    ),
-                    activeTrackColor: Colors.teal,
-                    inactiveTrackColor: Colors.teal.shade100,
-                    thumbColor: Colors.teal,
-                  ),
-                  child: Slider(
-                    value: sliderValue,
-                    onChanged: (value) {
-                      setState(() {
-                        sliderValue = value;
-                      });
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "05:30",
-                        style: TextStyle(
-                          color: Colors.grey.shade500,
-                          fontSize: 12,
+            StreamBuilder(
+              stream: _audioPlayer.positionStream,
+              builder: (context, snapshot) {
+                final position = snapshot.data ?? Duration.zero;
+                final duration = _audioPlayer.duration ?? Duration.zero;
+                return Column(
+                  children: [
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        trackHeight: 4,
+                        thumbShape: const RoundSliderThumbShape(
+                          enabledThumbRadius: 6,
                         ),
-                      ),
-                      Text(
-                        "15:00",
-                        style: TextStyle(
-                          color: Colors.grey.shade500,
-                          fontSize: 12,
+                        overlayShape: const RoundSliderOverlayShape(
+                          overlayRadius: 14,
                         ),
+                        activeTrackColor: Colors.teal,
+                        inactiveTrackColor: Colors.teal.shade100,
+                        thumbColor: Colors.teal,
                       ),
-                    ],
-                  ),
-                ),
-              ],
+                      child: Slider(
+                        min: 0,
+                        max: duration.inSeconds.toDouble(),
+                        value: position.inSeconds.toDouble().clamp(
+                          0,
+                          duration.inSeconds.toDouble(),
+                        ),
+                        onChanged: (value) {
+                          _audioPlayer.seek(Duration(seconds: value.toInt()));
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _formatDuration(position),
+                            style: TextStyle(color: Colors.grey.shade500),
+                          ),
+                          Text(
+                            _formatDuration(duration),
+                            style: TextStyle(color: Colors.grey.shade500),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
 
             const SizedBox(height: 20),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.shuffle, color: Colors.grey),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.skip_previous_rounded, size: 40),
-                  onPressed: () {},
-                ),
+            StreamBuilder(
+              stream: _audioPlayer.playerStateStream,
+              builder: (context, snapshot) {
+                final playerState = snapshot.data;
+                final processingState = playerState?.processingState;
+                final playing = playerState?.playing;
 
-                Container(
-                  width: 70,
-                  height: 70,
-                  decoration: BoxDecoration(
-                    color: Colors.teal,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.teal.withOpacity(0.4),
-                        blurRadius: 15,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    icon: Icon(
-                      isPlaying ? Icons.pause : Icons.play_arrow_rounded,
-                      color: Colors.white,
-                      size: 40,
+                if (processingState == ProcessingState.loading ||
+                    processingState == ProcessingState.buffering) {
+                  return const CircularProgressIndicator(color: Colors.teal);
+                }
+
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.shuffle, color: Colors.grey),
+                      onPressed: () {},
                     ),
-                    onPressed: () {
-                      setState(() {
-                        isPlaying = !isPlaying;
-                      });
-                    },
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.skip_next_rounded, size: 40),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.repeat, color: Colors.grey),
-                  onPressed: () {},
-                ),
-              ],
+                    IconButton(
+                      icon: const Icon(Icons.skip_previous_rounded, size: 40),
+                      onPressed: () {
+                        // Tua lại 10s
+                        _audioPlayer.seek(
+                          _audioPlayer.position - const Duration(seconds: 10),
+                        );
+                      },
+                    ),
+
+                    Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: Colors.teal,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.teal.withOpacity(0.4),
+                            blurRadius: 15,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          (playing == true)
+                              ? Icons.pause
+                              : Icons.play_arrow_rounded,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        onPressed: () {
+                          if (playing == true) {
+                            _audioPlayer.pause();
+                          } else {
+                            _audioPlayer.play();
+                          }
+                        },
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.skip_next_rounded, size: 40),
+                      onPressed: () {
+                        // Tua tới 10s
+                        _audioPlayer.seek(
+                          _audioPlayer.position + const Duration(seconds: 10),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.repeat, color: Colors.grey),
+                      onPressed: () {},
+                    ),
+                  ],
+                );
+              },
             ),
             const SizedBox(height: 50),
           ],

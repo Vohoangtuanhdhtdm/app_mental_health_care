@@ -9,12 +9,14 @@ class ContainerWidget extends StatelessWidget {
     required this.description,
     required this.duration,
     this.imageUrl,
+    this.audioUrl,
   });
 
   final String title;
   final String description;
   final String duration;
   final String? imageUrl;
+  final String? audioUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,9 @@ class ContainerWidget extends StatelessWidget {
             builder: (context) => MediaPlayerScreen(
               title: title,
               description: description,
+              audioUrl:
+                  audioUrl ??
+                  "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
               imageUrl:
                   imageUrl ??
                   "https://i.pinimg.com/736x/47/c5/0f/47c50f916191cea017c4582e140d493f.jpg", // Ảnh mặc định nếu null
