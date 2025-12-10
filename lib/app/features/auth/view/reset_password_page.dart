@@ -1,20 +1,20 @@
-import 'package:app_mental_health_care/data/services/auth/auth_service.dart';
+import 'package:app_mental_health_care/data/providers/auth/auth_providers.dart';
 import 'package:app_mental_health_care/app/features/auth/authen_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ResetPasswordPage extends StatefulWidget {
+class ResetPasswordPage extends ConsumerStatefulWidget {
   const ResetPasswordPage({super.key});
 
   @override
-  State<ResetPasswordPage> createState() => _ResetPasswordPage();
+  ConsumerState<ResetPasswordPage> createState() => _ResetPasswordPage();
 }
 
-class _ResetPasswordPage extends State<ResetPasswordPage> {
+class _ResetPasswordPage extends ConsumerState<ResetPasswordPage> {
   void handleReset(String email, _, _) async {
     try {
-      await authService.value.resetPassword(email: email);
-      // luôn check sau await
+      await ref.read(authControllerProvider).resetPassword(email);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Hay kiểm tra email của bạn')),

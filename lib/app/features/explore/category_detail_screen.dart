@@ -37,6 +37,7 @@ class CategoryDetailScreen extends ConsumerWidget {
                 description: item.description,
                 duration: item.duration,
                 imageUrl: item.imageUrl.isNotEmpty ? item.imageUrl : null,
+                audioUrl: item.audioUrl,
               );
             },
           );

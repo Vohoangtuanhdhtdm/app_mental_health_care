@@ -1,21 +1,22 @@
-import 'package:app_mental_health_care/data/services/auth/auth_service.dart';
+import 'package:app_mental_health_care/data/providers/auth/auth_providers.dart';
 import 'package:app_mental_health_care/app/features/auth/authen_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   void handleLogin(String email, String? password, _) async {
     try {
-      await authService.value.signIn(email: email, password: password!);
-      // luôn check sau await
+      await ref.read(authControllerProvider).signIn(email, password!);
       if (!mounted) return;
+
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Đăng nhập thành công')));

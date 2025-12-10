@@ -1,12 +1,17 @@
 import 'package:app_mental_health_care/app/features/home/widgets/section_title.dart';
 import 'package:app_mental_health_care/app/features/home/widgets/task_item.dart';
+import 'package:app_mental_health_care/data/providers/auth/auth_providers.dart';
+import 'package:app_mental_health_care/data/providers/user/user_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userAsync = ref.watch(currentUserProvider);
+
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
@@ -17,13 +22,35 @@ class HomePage extends StatelessWidget {
               "Xin chào,",
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
-            const Text(
-              "Võ Hoàng Tuấn!",
-              style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: Colors.teal,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                userAsync.when(
+                  data: (user) => Text(
+                    user?.name ?? " ",
+                    style: const TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.teal,
+                    ),
+                  ),
+                  loading: () => const SizedBox(
+                    width: 100,
+                    height: 30,
+                    child: LinearProgressIndicator(color: Colors.teal),
+                  ),
+                  error: (err, stack) => const Text(
+                    "Error User",
+                    style: TextStyle(fontSize: 26, color: Colors.red),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    await ref.read(authControllerProvider).signOut();
+                  },
+                  icon: const Icon(Icons.logout, color: Colors.grey),
+                ),
+              ],
             ),
 
             const SizedBox(height: 30),
