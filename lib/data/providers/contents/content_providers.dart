@@ -14,6 +14,13 @@ final contentsBySectionProvider =
       return repository.getAllContentsBySection(section);
     });
 
+// Provider lấy danh sách bài Yêu thích
+final favoriteContentsProvider =
+    StreamProvider.family<List<ContentModel>, List<String>>((ref, ids) {
+      final repository = ref.watch(contentRepositoryProvider);
+      return repository.getContentsByIds(ids);
+    });
+
 class ContentController {
   final Ref ref;
   ContentController(this.ref);

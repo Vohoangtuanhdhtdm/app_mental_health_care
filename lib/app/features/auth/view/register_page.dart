@@ -1,20 +1,17 @@
-import 'package:app_mental_health_care/data/services/auth/auth_service.dart';
+import 'package:app_mental_health_care/data/providers/auth/auth_providers.dart';
 import 'package:app_mental_health_care/app/features/auth/authen_page.dart';
-import 'package:app_mental_health_care/data/database/db_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  ConsumerState<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  // Khởi tạo service
-  final DatabaseServices _dbService = DatabaseServices();
-
+class _RegisterPageState extends ConsumerState<RegisterPage> {
   void handleRegister(String email, String? password, String? confirm) async {
     if (confirm == null || confirm.isEmpty || confirm != password) {
       if (!mounted) return;
@@ -24,24 +21,13 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
     try {
-      UserCredential userCredential = await authService.value.createAccount(
-        email: email,
-        password: password!,
-      );
-      // luôn check sau await
+      await ref.read(authControllerProvider).signUp(email, password!);
+
       if (!mounted) return;
 
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Đăng ký thành công')));
-
-      //  Firestore
-      await _dbService.saveUserInfoToFirestore(
-        userCredential.user!,
-        'New User',
-        0,
-      );
-      if (!mounted) return;
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;

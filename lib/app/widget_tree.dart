@@ -7,7 +7,7 @@ import 'package:app_mental_health_care/data/notifiers.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-List<Widget> pages = [HomePage(), ExploreScreen(), TestProfile()];
+List<Widget> pages = [HomePage(), ExploreScreen(), ProfilePage()];
 
 class WidgetTree extends StatelessWidget {
   const WidgetTree({super.key});

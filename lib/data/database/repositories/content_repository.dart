@@ -65,4 +65,22 @@ class ContentRepository {
       rethrow;
     }
   }
+
+  // Lấy danh sách bài hát dựa trên danh sách ID (Dùng cho Favorites)
+  Stream<List<ContentModel>> getContentsByIds(List<String> ids) {
+    if (ids.isEmpty)
+      return Stream.value([]); // Nếu list rỗng thì trả về rỗng ngay
+
+    // Lưu ý: Firestore 'whereIn' giới hạn tối đa 10-30 phần tử (tùy phiên bản).
+    // Với App cá nhân thì OK, App lớn cần chia nhỏ mảng (Chunking).
+    return _firestore
+        .collection('contents')
+        .where(FieldPath.documentId, whereIn: ids)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => ContentModel.fromFirestore(doc))
+              .toList(),
+        );
+  }
 }

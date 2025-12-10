@@ -1,93 +1,39 @@
-import 'package:app_mental_health_care/data/services/auth/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:app_mental_health_care/app/features/home/widgets/profile_widget/favorite_section_widget.dart';
+import 'package:app_mental_health_care/app/features/home/widgets/profile_widget/profile_widget.dart';
+import 'package:app_mental_health_care/app/features/home/widgets/profile_widget/stat_section_widget.dart';
+import 'package:app_mental_health_care/data/providers/user/user_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TestProfile extends StatelessWidget {
-  const TestProfile({super.key});
+class ProfilePage extends ConsumerWidget {
+  const ProfilePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    void logout() async {
-      try {
-        await authService.value.signOut();
-      } on FirebaseAuthException catch (e) {
-        print('Logout failed: ${e.message}');
-      }
-    }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userAsync = ref.watch(currentUserProvider);
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(height: 20),
+    return userAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Center(child: Text("Lỗi: $err")),
+      data: (user) {
+        if (user == null) {
+          return const Center(child: Text("Vui lòng đăng nhập"));
+        }
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              buildProfileHeader(context, ref, user),
+              const SizedBox(height: 30),
 
-          // 1. Avatar đơn giản, không viền cầu kỳ
-          const CircleAvatar(
-            radius: 50,
-            backgroundImage: NetworkImage(
-              'https://i.pinimg.com/736x/2a/72/9e/2a729ec22988b2a284a7fdf37f1847fd.jpg',
-            ),
-            backgroundColor: Colors.grey,
+              buildStatsSection(user.stats),
+
+              const SizedBox(height: 30),
+              buildFavoritesSection(ref, user.favorites),
+            ],
           ),
-
-          const SizedBox(height: 16),
-
-          const Text(
-            "Võ Hoàng Tuấn",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 4),
-          Text("hoangtuan@email.com", style: TextStyle(fontSize: 14)),
-
-          const SizedBox(height: 32),
-
-          const SizedBox(height: 32),
-          const Divider(height: 1),
-
-          _buildMinimalListTile(
-            icon: Icons.person_outline,
-            title: "Cập nhật thông tin ",
-          ),
-          _buildMinimalListTile(icon: Icons.book, title: "Nhật ký của tôi"),
-
-          _buildMinimalListTile(
-            icon: Icons.lock_outline,
-            title: "Đổi mật khẩu",
-          ),
-
-          const SizedBox(height: 20),
-
-          TextButton(
-            onPressed: () {
-              logout();
-            },
-            child: Text("Đăng xuất", style: TextStyle(fontSize: 14)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMinimalListTile({
-    required IconData icon,
-    required String title,
-  }) {
-    return Column(
-      children: [
-        ListTile(
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 4,
-          ),
-          leading: Icon(icon, size: 22),
-          title: Text(
-            title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-          ),
-          trailing: const Icon(Icons.chevron_right, size: 18),
-          onTap: () {},
-        ),
-        const Divider(height: 1, indent: 24, endIndent: 24),
-      ],
+        );
+      },
     );
   }
 }
