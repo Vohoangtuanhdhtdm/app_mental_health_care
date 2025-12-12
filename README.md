@@ -16,19 +16,24 @@
 | **style/** (Style) | Nếu chỉ **sửa format** (ví dụ: re-indent file `.firebaserc`). | `style(firebase): format config file` |
 | **test/** (Test) | Nếu **thêm/sửa test** để kiểm tra việc kết nối hoặc logic liên quan. | `test(firebase): add integration test for Firestore service` |
 
-## 📈 Bối cảnh & Thị trường
+## 🔬 Tính năng hiện có:
 
-* **Thị trường quốc tế:** Đã có các ứng dụng lớn như Calm, Headspace .
-* **Nguồn cảm hứng:** Ứng dụng **Rootd**, tập trung vào hỗ trợ chứng hoảng sợ và lo âu .
-* **Thị trường Việt Nam:** Các ứng dụng hỗ trợ bằng Tiếng Việt hiện còn rất ít và chất lượng chưa cao, cho thấy nhu cầu lớn từ người dùng .
+- Xác thực người dùng:
+  + Login
+  + Register
+  + Change password
+  + Forget password
 
-## 🔬 Nền tảng Khoa học
+- Danh sách bài học:
+  + Bài học lọc theo buổi sáng/ chiều/ tối
+  + Bài học lọc theo danh mục
+  + Thêm bài học vào danh sách yêu thích
+  + Phát bài học qua Audio dạng podcast
 
-Phương pháp luận của ứng dụng được xây dựng dựa trên các liệu pháp đã được khoa học chứng minh hiệu quả :
+- Người dùng:
+  + Chuỗi đăng nhập
+  + Thay đổi tên người dùng
+  + Danh sách bài học yêu thích
 
-* **CBT (Cognitive Behavioral Therapy):** Liệu pháp nhận thức – hành vi .
-* **MBSR (Mindfulness-Based Stress Reduction):** Giảm stress dựa trên chánh niệm .
-* **CBT-I (Cognitive Behavioral Therapy for Insomnia):** Can thiệp nhận thức – hành vi cho mất ngủ .
 
-Luồng hoạt động cốt lõi của ứng dụng tuân theo 5 bước: **Đánh giá -> Cá nhân hóa -> Theo dõi -> Tự trợ giúp -> Hỗ trợ chuyên gia** .
 
