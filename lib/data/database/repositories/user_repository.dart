@@ -39,9 +39,8 @@ class UserRepository {
     }
   }
 
-  // Updated Listening Minutes & Streak Calculations
-  // (Gọi khi người dùng nghe xong 1 bài)
-  Future<void> updateUserStats({required int minutesAdded}) async {
+  // Tracking Streak
+  Future<void> updateStreak() async {
     final uid = _auth.currentUser?.uid;
     if (uid == null) return;
 
@@ -53,18 +52,12 @@ class UserRepository {
     final currentUser = UserModel.fromFirestore(doc);
     final stats = currentUser.stats;
 
-    final now = DateTime.now(); // Lấy giờ hiện tại (VD: 14:30 ngày 10/10)
-    final today = DateTime(
-      now.year,
-      now.month,
-      now.day,
-    ); // Tạo ra mốc 00:00 ngày 10/10
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
 
-    // Biến chứa ngày cuối cùng người dùng vào app
     DateTime? lastDate;
 
     if (stats.lastActiveDate != null) {
-      // Lấy ngày cũ từ database và cũng làm tròn về 00:00
       lastDate = DateTime(
         stats.lastActiveDate!.year,
         stats.lastActiveDate!.month,
@@ -72,24 +65,23 @@ class UserRepository {
       );
     }
 
-    // Lấy streak cũ ra để tính toán
     int newCurrentStreak = stats.currentStreak;
 
-    // ĐIỀU KIỆN CHẶN: Chỉ tính toán nếu đây là ngày mới.
-    // Nếu (chưa từng học) HOẶC (hôm nay là ngày sau ngày cũ)
     if (lastDate == null || today.isAfter(lastDate)) {
-      // TRƯỜNG HỢP 1: HỌC LIÊN TIẾP (Hôm nay - Hôm cũ = 1 ngày)
+      // (Hôm nay - Hôm cũ = 1 ngày)
       if (lastDate != null && today.difference(lastDate).inDays == 1) {
-        // Nếu lần cuối là hôm qua -> Tăng chuỗi
         newCurrentStreak += 1;
-
-        // TRƯỜNG HỢP 2: BỊ NGẮT QUÃNG (Hôm nay - Hôm cũ > 1 ngày) HOẶC (Người mới)
-        // Ví dụ: Hôm kia học, hôm qua quên, hôm nay học -> Mất chuỗi.
-      } else if (lastDate == null || today.difference(lastDate).inDays > 1) {
-        // Nếu bỏ lỡ 1 ngày hoặc mới tinh -> Reset về 1
+      }
+      // BỊ NGẮT QUÃNG (Hôm nay - Hôm cũ > 1 ngày) HOẶC (Người mới)
+      else if (lastDate == null || today.difference(lastDate).inDays > 1) {
         newCurrentStreak = 1;
       }
+      // Nếu lastDate == today thì không làm gì cả (đã tính streak cho hôm nay rồi)
+    } else {
+      // Nếu không thỏa mãn điều kiện (ví dụ: today == lastDate), thoát luôn để tiết kiệm write
+      return;
     }
+
     // Cập nhật kỷ lục
     int newLongestStreak = (newCurrentStreak > stats.longestStreak)
         ? newCurrentStreak
@@ -97,7 +89,6 @@ class UserRepository {
 
     // Đẩy lên Firestore
     await userRef.update({
-      'stats.totalMinutes': FieldValue.increment(minutesAdded),
       'stats.currentStreak': newCurrentStreak,
       'stats.longestStreak': newLongestStreak,
       'stats.lastActiveDate': Timestamp.now(),

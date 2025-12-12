@@ -18,9 +18,9 @@ Widget buildStatsSection(UserStats stats) {
       const SizedBox(width: 16),
       Expanded(
         child: buildStatCard(
-          title: "Tổng thời gian",
-          value: "${stats.totalMinutes}",
-          unit: "phút",
+          title: "Kỷ lục",
+          value: "${stats.longestStreak}",
+          unit: "ngày",
           icon: Icons.timer_rounded,
           color: Colors.teal,
           bgColor: Colors.teal.shade50,

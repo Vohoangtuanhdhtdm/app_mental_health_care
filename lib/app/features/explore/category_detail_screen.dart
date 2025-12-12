@@ -31,6 +31,7 @@ class CategoryDetailScreen extends ConsumerWidget {
               final item = contents[index];
 
               return TaskItem(
+                id: item.id,
                 isActive: true,
                 isLast: index == contents.length - 1,
                 title: item.title,

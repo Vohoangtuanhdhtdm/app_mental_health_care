@@ -15,8 +15,8 @@ class UserController {
     await repo.toggleFavorite(contentId, isLike);
   }
 
-  Future<void> trackListeningTime(int minutes) async {
+  Future<void> markActivity() async {
     final repo = ref.read(userRepositoryProvider);
-    await repo.updateUserStats(minutesAdded: minutes);
+    await repo.updateStreak();
   }
 }

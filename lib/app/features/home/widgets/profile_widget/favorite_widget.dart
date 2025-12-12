@@ -45,6 +45,7 @@ Widget buildFavoriteItem(BuildContext context, ContentModel content) {
           context,
           MaterialPageRoute(
             builder: (context) => MediaPlayerScreen(
+              id: content.id,
               title: content.title,
               description: content.description,
               imageUrl: content.imageUrl,
