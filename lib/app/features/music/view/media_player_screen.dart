@@ -1,24 +1,29 @@
+import 'package:app_mental_health_care/data/providers/user/user_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 
-class MediaPlayerScreen extends StatefulWidget {
+class MediaPlayerScreen extends ConsumerStatefulWidget {
   const MediaPlayerScreen({
     super.key,
+    required this.id,
     required this.title,
     required this.description,
     this.imageUrl,
     required this.audioUrl,
   });
+
+  final String id;
   final String title;
   final String description;
   final String? imageUrl;
   final String audioUrl;
 
   @override
-  State<MediaPlayerScreen> createState() => _MediaPlayerScreenState();
+  ConsumerState<MediaPlayerScreen> createState() => _MediaPlayerScreenState();
 }
 
-class _MediaPlayerScreenState extends State<MediaPlayerScreen> {
+class _MediaPlayerScreenState extends ConsumerState<MediaPlayerScreen> {
   late AudioPlayer _audioPlayer;
 
   @override
@@ -26,27 +31,30 @@ class _MediaPlayerScreenState extends State<MediaPlayerScreen> {
     _audioPlayer = AudioPlayer();
     _initAudio();
     super.initState();
+
+    // Gọi khi vào màn hình để tính chuỗi ngày
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(userControllerProvider).markActivity();
+      debugPrint("Đã đánh dấu hoạt động cho ngày hôm nay!");
+    });
   }
 
   @override
   void dispose() {
-    _audioPlayer.dispose(); // Giải phóng bộ nhớ khi thoát màn hình
+    _audioPlayer.dispose();
     super.dispose();
   }
 
-  // Hàm khởi tạo và load nhạc
   Future<void> _initAudio() async {
     try {
-      // Load nhạc từ URL
       await _audioPlayer.setUrl(widget.audioUrl);
-      // -- Tự động phát khi vào màn hình (nếu muốn)
-      // _audioPlayer.play(); --
+      _audioPlayer.play(); // Tự động phát
     } catch (e) {
-      print("Lỗi load nhạc: $e");
+      debugPrint("Lỗi load nhạc: $e");
     }
   }
 
-  // Hàm format thời gian (ví dụ 65 giây -> 01:05)
+  // Hàm format thời gian (65 giây -> 01:05)
   String _formatDuration(Duration? duration) {
     if (duration == null) return "--:--";
     String twoDigits(int n) => n.toString().padLeft(2, '0');
@@ -57,6 +65,8 @@ class _MediaPlayerScreenState extends State<MediaPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userAsync = ref.watch(currentUserProvider);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -67,7 +77,27 @@ class _MediaPlayerScreenState extends State<MediaPlayerScreen> {
           },
         ),
         actions: [
-          IconButton(icon: const Icon(Icons.more_horiz), onPressed: () {}),
+          userAsync.when(
+            data: (user) {
+              if (user == null) return const SizedBox();
+              final isLiked = user.favorites.contains(widget.id);
+              return IconButton(
+                icon: Icon(
+                  isLiked ? Icons.favorite : Icons.favorite_border,
+                  color: isLiked ? Colors.red : Colors.black,
+                  size: 28,
+                ),
+                onPressed: () {
+                  ref
+                      .read(userControllerProvider)
+                      .toggleFavorite(widget.id, user.favorites);
+                },
+              );
+            },
+            loading: () => const SizedBox(),
+            error: (_, __) => const SizedBox(),
+          ),
+          const SizedBox(width: 10),
         ],
       ),
       body: Padding(
@@ -202,7 +232,7 @@ class _MediaPlayerScreenState extends State<MediaPlayerScreen> {
                       onPressed: () {},
                     ),
                     IconButton(
-                      icon: const Icon(Icons.skip_previous_rounded, size: 40),
+                      icon: const Icon(Icons.replay_10_rounded, size: 32),
                       onPressed: () {
                         // Tua lại 10s
                         _audioPlayer.seek(
@@ -243,7 +273,11 @@ class _MediaPlayerScreenState extends State<MediaPlayerScreen> {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.skip_next_rounded, size: 40),
+                      icon: const Icon(
+                        Icons.forward_10_rounded,
+                        size: 32,
+                        color: Colors.black87,
+                      ),
                       onPressed: () {
                         // Tua tới 10s
                         _audioPlayer.seek(

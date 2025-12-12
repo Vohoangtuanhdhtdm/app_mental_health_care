@@ -1,25 +1,29 @@
 import 'package:app_mental_health_care/app/features/music/view/media_player_screen.dart';
 import 'package:app_mental_health_care/data/constants.dart';
+import 'package:app_mental_health_care/data/providers/user/user_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ContainerWidget extends StatelessWidget {
+class ContainerWidget extends ConsumerWidget {
   const ContainerWidget({
     super.key,
+    required this.id,
     required this.title,
     required this.description,
     required this.duration,
     this.imageUrl,
-    this.audioUrl,
+    required this.audioUrl,
   });
 
+  final String id;
   final String title;
   final String description;
   final String duration;
   final String? imageUrl;
-  final String? audioUrl;
+  final String audioUrl;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
         // Điều hướng sang màn hình Player
@@ -27,11 +31,10 @@ class ContainerWidget extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => MediaPlayerScreen(
+              id: id,
               title: title,
               description: description,
-              audioUrl:
-                  audioUrl ??
-                  "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+              audioUrl: audioUrl,
               imageUrl:
                   imageUrl ??
                   "https://i.pinimg.com/736x/47/c5/0f/47c50f916191cea017c4582e140d493f.jpg", // Ảnh mặc định nếu null
@@ -80,7 +83,7 @@ class ContainerWidget extends StatelessWidget {
 
                         InkWell(
                           onTap: () {
-                            _showMoreOption(context);
+                            _showMoreOption(context, ref);
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 8.0, bottom: 8.0),
@@ -159,7 +162,8 @@ class ContainerWidget extends StatelessWidget {
     );
   }
 
-  void _showMoreOption(BuildContext context) {
+  void _showMoreOption(BuildContext context, WidgetRef ref) {
+    final userAsync = ref.read(currentUserProvider);
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -168,17 +172,71 @@ class ContainerWidget extends StatelessWidget {
       builder: (context) {
         return Container(
           padding: const EdgeInsets.all(20),
-          height: 150,
-          child: Column(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.favorite_border, color: Colors.red),
-                title: const Text("Lưu vào danh sách yêu thích"),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
+          height: 180, // Tăng chiều cao một chút
+          child: userAsync.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (e, s) => Center(child: Text("Lỗi: $e")),
+            data: (user) {
+              if (user == null) {
+                return const Center(child: Text("Vui lòng đăng nhập"));
+              }
+
+              // Kiểm tra xem bài này đã được thích chưa
+              final isLiked = user.favorites.contains(id);
+
+              return Column(
+                children: [
+                  // Nút Yêu Thích
+                  ListTile(
+                    leading: Icon(
+                      isLiked ? Icons.favorite : Icons.favorite_border,
+                      color: isLiked ? Colors.red : Colors.grey,
+                    ),
+                    title: Text(
+                      isLiked
+                          ? "Bỏ khỏi danh sách yêu thích"
+                          : "Lưu vào danh sách yêu thích",
+                      style: TextStyle(
+                        color: isLiked ? Colors.red : Colors.black87,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    onTap: () async {
+                      // Đóng modal trước cho mượt
+                      Navigator.pop(context);
+
+                      // Gọi hàm toggleFavorite từ Controller
+                      await ref
+                          .read(userControllerProvider)
+                          .toggleFavorite(id, user.favorites);
+
+                      // Hiện thông báo
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              isLiked
+                                  ? "Đã xóa khỏi yêu thích"
+                                  : "Đã thêm vào yêu thích",
+                            ),
+                            duration: const Duration(seconds: 1),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  // Có thể thêm nút khác ví dụ: Share
+                  ListTile(
+                    leading: const Icon(Icons.share, color: Colors.blue),
+                    title: const Text("Chia sẻ"),
+                    onTap: () {
+                      Navigator.pop(context);
+                      // TODO: Implement share functionality
+                    },
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
