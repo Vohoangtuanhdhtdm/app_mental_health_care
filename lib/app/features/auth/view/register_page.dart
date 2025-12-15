@@ -12,7 +12,11 @@ class RegisterPage extends ConsumerStatefulWidget {
 }
 
 class _RegisterPageState extends ConsumerState<RegisterPage> {
-  void handleRegister(String email, String? password, String? confirm) async {
+  Future<void> handleRegister(
+    String email,
+    String? password,
+    String? confirm,
+  ) async {
     if (confirm == null || confirm.isEmpty || confirm != password) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

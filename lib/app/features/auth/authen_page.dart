@@ -17,7 +17,8 @@ class AuthenPage extends StatefulWidget {
 
   final String lottieAsset;
 
-  final void Function(String email, String? password, String? confirm) onSubmit;
+  final Future<void> Function(String email, String? password, String? confirm)
+  onSubmit;
 
   String get title {
     switch (mode) {
@@ -61,6 +62,7 @@ class AuthenPage extends StatefulWidget {
 }
 
 class _AuthenPageState extends State<AuthenPage> {
+  bool _isLoading = false;
   final TextEditingController controllerEmail = TextEditingController();
   final TextEditingController controllerPw = TextEditingController();
   final TextEditingController controllerConfirm = TextEditingController();
@@ -73,13 +75,31 @@ class _AuthenPageState extends State<AuthenPage> {
     super.dispose();
   }
 
-  //Callback hàm được truyền từ bên ngoài như một tham số
-  void _onPressed() {
-    widget.onSubmit(
-      controllerEmail.text,
-      widget.mode == AuthMode.reset ? null : controllerPw.text,
-      widget.mode == AuthMode.register ? controllerConfirm.text : null,
-    );
+  void _onPressed() async {
+    if (_isLoading) return;
+
+    // Ẩn bàn phím ngay khi bấm nút
+    FocusScope.of(context).unfocus();
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // Gọi hàm submit và chờ nó chạy xong
+      await widget.onSubmit(
+        controllerEmail.text,
+        widget.mode == AuthMode.reset ? null : controllerPw.text,
+        widget.mode == AuthMode.register ? controllerConfirm.text : null,
+      );
+    } finally {
+      // Dù thành công hay thất bại cũng mở lại nút (nếu widget còn tồn tại)
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override

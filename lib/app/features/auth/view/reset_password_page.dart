@@ -12,7 +12,7 @@ class ResetPasswordPage extends ConsumerStatefulWidget {
 }
 
 class _ResetPasswordPage extends ConsumerState<ResetPasswordPage> {
-  void handleReset(String email, _, _) async {
+  Future<void> handleReset(String email, _, _) async {
     try {
       await ref.read(authControllerProvider).resetPassword(email);
       if (!mounted) return;
