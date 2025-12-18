@@ -1,6 +1,6 @@
 import 'package:app_mental_health_care/app/features/explore/explore_screen.dart';
 import 'package:app_mental_health_care/app/features/home/view/home_page.dart';
-import 'package:app_mental_health_care/app/features/home/view/profile_page.dart';
+import 'package:app_mental_health_care/app/features/home/view/profile/profile_page.dart';
 import 'package:app_mental_health_care/app/features/home/widgets/navbar_widget.dart';
 import 'package:app_mental_health_care/data/constants.dart';
 import 'package:app_mental_health_care/data/notifiers.dart';

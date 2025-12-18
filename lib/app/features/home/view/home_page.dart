@@ -25,7 +25,7 @@ class HomePage extends ConsumerWidget {
         body: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(
             20,
-            20,
+            0,
             20,
             100,
           ), // Padding bottom để tránh bị che

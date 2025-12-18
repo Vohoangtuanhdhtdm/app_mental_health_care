@@ -14,7 +14,7 @@ class ExploreScreen extends ConsumerWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          // 1. APP BAR ĐỒNG BỘ STYLE HOME
+          // 1. APP BAR
           SliverAppBar(
             expandedHeight: 80.0,
             floating: false,
@@ -25,7 +25,7 @@ class ExploreScreen extends ConsumerWidget {
               title: const Text(
                 "Khám phá",
                 style: TextStyle(
-                  color: Colors.teal, // Màu chữ Teal giống "Võ Hoàng Tuấn!"
+                  color: Colors.teal,
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
                 ),
@@ -59,7 +59,9 @@ class ExploreScreen extends ConsumerWidget {
                     crossAxisCount: 2,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
-                    childAspectRatio: 0.85, // Tỷ lệ thẻ dọc
+                    // --- THAY ĐỔI 1: GIẢM TỶ LỆ ĐỂ THẺ CAO HƠN ---
+                    // 0.85 -> 0.72 giúp thẻ cao hơn, đủ chỗ cho text 2 dòng
+                    childAspectRatio: 0.72,
                   ),
                   delegate: SliverChildBuilderDelegate((context, index) {
                     final category = categories[index];
@@ -70,14 +72,13 @@ class ExploreScreen extends ConsumerWidget {
             },
           ),
 
-          // Khoảng trống dưới cùng
           const SliverToBoxAdapter(child: SizedBox(height: 80)),
         ],
       ),
     );
   }
 
-  // WIDGET CARD ĐỒNG BỘ VỚI HOME
+  // WIDGET CARD
   Widget _buildHomeStyleCard(BuildContext context, CategoryModel category) {
     return GestureDetector(
       onTap: () {
@@ -90,13 +91,11 @@ class ExploreScreen extends ConsumerWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white, // Nền trắng
-          borderRadius: BorderRadius.circular(
-            24,
-          ), // Bo góc giống TaskItem ở Home
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.teal.withOpacity(0.05), // Bóng đổ màu Teal cực nhẹ
+              color: Colors.teal.withOpacity(0.05),
               offset: const Offset(0, 8),
               blurRadius: 20,
               spreadRadius: 0,
@@ -106,12 +105,14 @@ class ExploreScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // PHẦN TRÊN: CHỨA ICON (Nền xanh nhạt giống Home)
+            // PHẦN TRÊN: CHỨA ICON
+            // --- THAY ĐỔI 2 (Tuỳ chọn): Cân đối lại tỷ lệ flex ---
+            // Có thể giữ 3:2 hoặc đổi thành 4:3 nếu muốn ảnh to hơn chút nhưng vẫn đủ chỗ cho text
             Expanded(
               flex: 3,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.teal.shade50, // Màu nền mint giống icon ở Home
+                  color: Colors.teal.shade50,
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(24),
                   ),
@@ -158,12 +159,16 @@ class ExploreScreen extends ConsumerWidget {
             Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                // --- THAY ĐỔI 3: GIẢM PADDING ---
+                // Giảm từ 16 xuống 12 để tiết kiệm không gian, tránh overflow
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12.0,
+                  vertical: 12.0,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Tên danh mục: Màu Teal đậm giống tiêu đề bài tập ở Home
                     Text(
                       category.name,
                       style: const TextStyle(
@@ -175,12 +180,9 @@ class ExploreScreen extends ConsumerWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 8),
-
-                    // Mô tả có điểm nhấn màu Cam (Orange)
+                    const SizedBox(height: 8), // Giữ khoảng cách này
                     Row(
                       children: [
-                        // Chấm tròn cam giống Timeline ở Home
                         Container(
                           width: 8,
                           height: 8,

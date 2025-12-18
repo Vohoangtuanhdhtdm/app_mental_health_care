@@ -21,6 +21,10 @@ dependencies:
   flutter_riverpod: ^3.0.3
   just_audio: ^0.10.5
   just_audio_background: ^0.0.1-beta.17
+  flutter_dotenv: ^6.0.0
+  vapi: ^0.1.0
+  permission_handler: ^11.4.0
+  equatable: ^2.0.7
 
 dev_dependencies:
   flutter_test:
@@ -34,3 +38,4 @@ flutter:
   assets:
     - assets/images/
     - assets/lotties/
+    - .env

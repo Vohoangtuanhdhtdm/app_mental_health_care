@@ -1,3 +1,4 @@
+import 'package:app_mental_health_care/app/features/home/view/profile/widgets/api_plan_section.dart';
 import 'package:app_mental_health_care/app/features/home/widgets/profile_widget/favorite_section_widget.dart';
 import 'package:app_mental_health_care/app/features/home/widgets/profile_widget/profile_widget.dart';
 import 'package:app_mental_health_care/app/features/home/widgets/profile_widget/stat_section_widget.dart';
@@ -20,16 +21,27 @@ class ProfilePage extends ConsumerWidget {
           return const Center(child: Text("Vui lòng đăng nhập"));
         }
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          // Tăng padding tổng thể để nội dung không sát mép màn hình
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
+              // 1. Header Profile
               buildProfileHeader(context, ref, user),
-              const SizedBox(height: 30),
-
+              const SizedBox(height: 32), // Tăng khoảng cách
+              // 2. Stats Section
               buildStatsSection(user.stats),
+              const SizedBox(height: 32),
 
-              const SizedBox(height: 30),
+              // 3. AI PLAN SECTION
+              ApiPlanSection(userId: user.uid),
+              const SizedBox(height: 32),
+
+              // 4. Favorites Section
               buildFavoritesSection(ref, user.favorites),
+
+              // Thêm khoảng trống dưới cùng để không bị cấn nút Home ảo (trên iOS)
+              const SizedBox(height: 50),
             ],
           ),
         );
